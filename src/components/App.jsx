@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import Modal from 'react-modal'
+import { Link } from 'react-router-dom'
 
-import { addEmployee } from './actions/employee_actions'
-import states from './assets/states'
+import { addEmployee } from '../actions/employee_actions'
+import states from '../assets/states'
 
-import './App.css'
+import '../styles/App.css'
 /* global $ */
 
 function App() {
@@ -50,7 +51,11 @@ function App() {
     document.body.classList.add('no-scroll')
   }
 
-  const handleClickOutside = () => {
+  const handleClickOutside = (e) => {
+      if (document.getElementById('state').contains(e.target) ||
+      document.getElementById('department').contains(e.target)) {
+        return
+      }
       setIsOpen( {state: false, department: false} )
   }
   
@@ -74,7 +79,7 @@ function App() {
         <h1>HRnet</h1>
       </div>
       <div className="container">
-        <a href="employee-list.html">View Current Employees</a>
+        <Link to="/employee-list">View Current Employees</Link>
         <h2>Create Employee</h2>
         <form action="#" id="create-employee">
           <label htmlFor="first-name">First Name</label>
@@ -161,7 +166,7 @@ function App() {
             name="department"
             id="department"
             value={department}
-            onChange={(e) => setDepartment(e.target.value)}
+            onChange={(e) => {setDepartment(e.target.value)}}
           >
             <option>Sales</option>
             <option>Marketing</option>
