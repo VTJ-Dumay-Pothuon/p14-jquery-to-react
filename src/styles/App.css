@@ -41,7 +41,7 @@ label {
   overflow: hidden;
 }
 
-select {
+select.home {
   width: 14em;
   border-radius: 3px;
   border: 1px solid #c5c5c5;
@@ -57,4 +57,32 @@ select {
 
 .opened {
   background: url('../assets/arrow_up.svg') no-repeat calc(100% - 10px) center;
+}
+
+.ReactModal__Overlay--after-open {
+  background-color: rgba(0,0,0,0.75) !important;
+}
+
+.ReactModal__Content {
+  position: relative;
+  margin: 44vh auto;
+  padding: 0 30px;
+  max-width: 500px;
+  width: 90%;
+  box-sizing: border-box;
+  box-shadow: 0 0 10px #000;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.close-button {
+  position: absolute;
+  right: -12px;
+  top: -12px;
+  width: 30px;
+  height: 30px;
+  background: url('../assets/close-icon.svg') no-repeat center center white;
+  border: black solid 3px;
+  border-radius: 50%;
+  cursor: pointer;
 }

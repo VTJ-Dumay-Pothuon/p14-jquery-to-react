@@ -135,7 +135,7 @@ function App() {
 
             <label htmlFor="state">State</label>
             <select
-              className={`select ${isOpen.state ? 'opened' : 'closed'}`}
+              className={`home ${isOpen.state ? 'opened' : 'closed'}`}
               onClick={() => toggleSelect('state')}
               name="state"
               id="state"
@@ -161,7 +161,7 @@ function App() {
 
           <label htmlFor="department">Department</label>
           <select
-            className={`select ${isOpen.department ? 'opened' : 'closed'}`}
+            className={`home ${isOpen.department ? 'opened' : 'closed'}`}
             onClick={() => toggleSelect('department')}
             name="department"
             id="department"
@@ -180,12 +180,11 @@ function App() {
       </div>
 
       <Modal id="confirmation" className="modal" isOpen={confirmationVisible}>
-        <h2>Modal Content</h2>
-        <p>This is the content of the modal.</p>
-        <button onClick={() => {
+        <p>Employee Created!</p>
+        <button className='close-button' onClick={() => {
             setConfirmationVisible(false)
             document.body.classList.remove('no-scroll')
-          }}>Close Modal</button>
+          }}></button>
       </Modal>
     </div>
   )
