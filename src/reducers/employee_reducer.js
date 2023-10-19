@@ -1,22 +1,21 @@
-import { ADD_EMPLOYEE, GET_EMPLOYEES } from '../actions/employee_actions'
+import { ADD_EMPLOYEE, GET_EMPLOYEES } from '../actions/employee_actions';
 
-const initialState = { employees: [] }
+const initialState = { employees: JSON.parse(localStorage.getItem('employees')) || [] };
 
 const employeeReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_EMPLOYEE:
       return {
-        ...state,
-        employees: [...state.employees, action.payload],
-      }
+        employees: [...state.employees, action.payload]
+      };
     case GET_EMPLOYEES:
       return {
         ...state,
-        employees: state.employees,
-      }
+        employees: action.payload
+      };
     default:
-      return state
+      return state;
   }
-}
+};
 
-export default employeeReducer
+export default employeeReducer;

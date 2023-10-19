@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Modal from 'react-modal'
 import { Link } from 'react-router-dom'
 
-import { addEmployee } from '../actions/employee_actions'
+import { addEmployee, getEmployees } from '../actions/employee_actions'
 import states from '../assets/states'
 
 import '../styles/App.css'
 /* global $ */
+
+Modal.setAppElement('#root');
 
 function App() {
   const [firstName, setFirstName] = useState('')
@@ -24,6 +26,12 @@ function App() {
     state: false,
     department: false
   })
+  
+  getEmployees()
+  const employees = useSelector((state) => state.store.employeeReducer.employees);
+  useEffect(() => {
+    localStorage.setItem('employees', JSON.stringify(employees));
+  }, [employees])
 
   const toggleSelect = (selectName) => {
     setIsOpen((prevState) => ({
