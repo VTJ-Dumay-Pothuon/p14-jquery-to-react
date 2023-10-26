@@ -1,36 +1,29 @@
-import { useEffect } from 'react';
-import { Link } from 'react-router-dom'
-/* global $ */
+import { useState, useEffect } from 'react'
+//import { Link } from 'react-router-dom'
+import TableTemplate from './TableTemplate'
 
-function Employees() {
+const columns = [
+  { Header: 'First Name',    accessor: 'firstName'   },
+  { Header: 'Last Name',     accessor: 'lastName'    },
+  { Header: 'Start Date',    accessor: 'startDate'   },
+  { Header: 'Department',    accessor: 'department'  },
+  { Header: 'Date of Birth', accessor: 'dateOfBirth' },
+  { Header: 'Street',        accessor: 'street'      },
+  { Header: 'City',          accessor: 'city'        },
+  { Header: 'State',         accessor: 'state'       },
+  { Header: 'Zip Code',      accessor: 'zipCode'     }
+]
+
+const Employees = () => {
+  const [data, setData] = useState([]);
   useEffect(() => {
     const employees = JSON.parse(localStorage.getItem('employees'));
+    if (employees) {
+      setData(employees)
+    }
+  }, [])
 
-    $(document).ready(function () {
-      $('#employee-table').DataTable({
-        data: employees,
-        columns: [
-          { title: 'First Name', data: 'firstName' },
-          { title: 'Last Name', data: 'lastName' },
-          { title: 'Start Date', data: 'startDate' },
-          { title: 'Department', data: 'department' },
-          { title: 'Date of Birth', data: 'dateOfBirth' },
-          { title: 'Street', data: 'street' },
-          { title: 'City', data: 'city' },
-          { title: 'State', data: 'state' },
-          { title: 'Zip Code', data: 'zipCode' },
-        ],
-      });
-    });
-  }, []);
-
-  return (
-    <div className="container">
-      <h1>Current Employees</h1>
-      <table id="employee-table" className="display"></table>
-      <Link to="/">Home</Link>
-    </div>
-  );
+  return <TableTemplate columns={columns} data={data} />
 }
 
-export default Employees;
+export default Employees

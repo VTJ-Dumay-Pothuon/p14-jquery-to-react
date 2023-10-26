@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Modal from 'react-modal'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { addEmployee, getEmployees } from '../actions/employee_actions'
 import states from '../assets/states'
@@ -11,7 +11,7 @@ import '../styles/App.css'
 
 Modal.setAppElement('#root');
 
-function App() {
+const App = () => {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [dateOfBirth, setDateOfBirth] = useState('')
@@ -66,7 +66,9 @@ function App() {
       }
       setIsOpen( {state: false, department: false} )
   }
-  
+
+  const navigate = useNavigate()
+
   useEffect(() => {
     $('#date-of-birth').datetimepicker({
       timepicker: false,
@@ -77,9 +79,17 @@ function App() {
       format: 'm/d/Y'
     })
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        setConfirmationVisible(false)
+        document.body.classList.remove('no-scroll')
+        navigate('/employee-list')
+      }}
+    )
+
+    document.addEventListener('mousedown', handleClickOutside)
     return () => {document.removeEventListener('mousedown', handleClickOutside)}
-  }, [])
+  }, [navigate])
 
   return (
     <div className="App">
