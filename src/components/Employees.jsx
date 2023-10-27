@@ -1,25 +1,32 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import TableTemplate from './TableTemplate'
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'
 
 import '../styles/Employees.css'
 
-const columns = [
-  { Header: 'First Name',    accessor: 'firstName'   },
-  { Header: 'Last Name',     accessor: 'lastName'    },
-  { Header: 'Start Date',    accessor: 'startDate'   },
-  { Header: 'Department',    accessor: 'department'  },
-  { Header: 'Date of Birth', accessor: 'dateOfBirth' },
-  { Header: 'Street',        accessor: 'street'      },
-  { Header: 'City',          accessor: 'city'        },
-  { Header: 'State',         accessor: 'state'       },
-  { Header: 'Zip Code',      accessor: 'zipCode'     }
-]
-
 const Employees = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([])
+
+  const alphabetical = useMemo(() => (rowA, rowB, columnId) => {
+    const a = rowA.original[columnId].toLowerCase()
+    const b = rowB.original[columnId].toLowerCase()
+    return (a > b) ? 1 : -1
+  }, [])
+  
+  const columns = [
+    { Header: 'First Name',    accessor: 'firstName',  sortType: alphabetical   },
+    { Header: 'Last Name',     accessor: 'lastName',   sortType: alphabetical   },
+    { Header: 'Start Date',    accessor: 'startDate',  sortType: 'datetime'     },
+    { Header: 'Department',    accessor: 'department', sortType: alphabetical   },
+    { Header: 'Date of Birth', accessor: 'dateBirth',  sortType: 'datetime'     },
+    { Header: 'Street',        accessor: 'street',     sortType: 'alphanumeric' },
+    { Header: 'City',          accessor: 'city',       sortType: alphabetical   },
+    { Header: 'State',         accessor: 'state',      sortType: alphabetical   },
+    { Header: 'Zip Code',      accessor: 'zipCode',    sortType: 'alphanumeric' }
+  ]
+
   useEffect(() => {
-    const employees = JSON.parse(localStorage.getItem('employees'));
+    const employees = JSON.parse(localStorage.getItem('employees'))
     if (employees) {
       setData(employees)
     }

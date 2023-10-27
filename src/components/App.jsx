@@ -9,7 +9,7 @@ import states from '../assets/states'
 import '../styles/App.css'
 /* global $ */
 
-Modal.setAppElement('#root');
+Modal.setAppElement('#root')
 
 const App = () => {
   const [firstName, setFirstName] = useState('')
@@ -28,9 +28,9 @@ const App = () => {
   })
   
   getEmployees()
-  const employees = useSelector((state) => state.store.employeeReducer.employees);
+  const employees = useSelector((state) => state.store.employeeReducer.employees)
   useEffect(() => {
-    localStorage.setItem('employees', JSON.stringify(employees));
+    localStorage.setItem('employees', JSON.stringify(employees))
   }, [employees])
 
   const toggleSelect = (selectName) => {

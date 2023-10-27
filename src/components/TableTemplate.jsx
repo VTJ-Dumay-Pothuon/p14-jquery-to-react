@@ -1,7 +1,8 @@
+import { useEffect } from 'react'
 import { useTable, useSortBy, usePagination } from 'react-table'
 import PropTypes from 'prop-types'
 
-   const TableTemplate = ({ columns, data }) => {
+  const TableTemplate = ({ columns, data }) => {
      const {
        getTableProps,
        getTableBodyProps,
@@ -12,18 +13,40 @@ import PropTypes from 'prop-types'
        previousPage,
        canNextPage,
        canPreviousPage,
-       state: { pageIndex, pageSize },
+       state: { pageIndex, pageSize, sortBy },
        setPageSize
      } = useTable(
        {
          columns,
          data,
-         initialState: { pageIndex: 0, pageSize: 10 }
+         initialState: { pageIndex: 0, pageSize: 10, sortBy: [{ id: 'firstName', desc: false }] }
        },
        useSortBy,
        usePagination
      )
 
+    useEffect(() => {
+      if (sortBy.length > 0) {
+        const sortedColumn = columns.find((column) => column.accessor === sortBy[0].id)
+        if (sortedColumn) {
+          document.querySelectorAll('.sorted').forEach((element) => {
+            element.classList.remove('sorted')
+          })
+
+          const index = columns.findIndex((column) => column.accessor === sortBy[0].id) + 1
+
+          const headerElements = Array.from(document.querySelectorAll('thead tr th:nth-child(' + index + ')'));
+          const cellElements = Array.from(document.querySelectorAll('tbody tr td:nth-child(' + index + ')'));
+          const headerAndCells = headerElements.concat(cellElements);
+
+          console.log(headerAndCells)
+          headerAndCells.forEach((element) => {
+            element.classList.add('sorted')
+          })
+        }
+      }
+    }, [sortBy, columns])
+    
      return (
        <div>
          <div className="entries">
