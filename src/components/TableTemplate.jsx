@@ -6,17 +6,19 @@ import PropTypes from 'prop-types'
        getTableProps,
        getTableBodyProps,
        headerGroups,
+       prepareRow,
        page,
        nextPage,
        previousPage,
        canNextPage,
        canPreviousPage,
-       state: { pageIndex }
+       state: { pageIndex, pageSize },
+       setPageSize
      } = useTable(
        {
          columns,
          data,
-         initialState: { pageIndex: 0 }
+         initialState: { pageIndex: 0, pageSize: 10 }
        },
        useSortBy,
        usePagination
@@ -24,6 +26,17 @@ import PropTypes from 'prop-types'
 
      return (
        <div>
+         <div className="entries">
+            <span>Show </span>
+              <select value={pageSize} onChange={e => setPageSize(Number(e.target.value))}>
+                {[5, 10, 25, 50].map(pageSize => (
+                  <option key={pageSize} value={pageSize}>
+                    {pageSize}
+                  </option>
+                ))}
+              </select>
+            <span> entries</span>
+         </div>
          <table {...getTableProps()} className="table">
            <thead>
              {headerGroups.map(headerGroup => (
@@ -41,6 +54,7 @@ import PropTypes from 'prop-types'
            </thead>
           <tbody {...getTableBodyProps()}>
             {page.map(row => {
+              prepareRow(row)
               return (
                 <tr {...row.getRowProps()} key={row.id}>
                   {row.cells.map(cell => {
@@ -52,6 +66,10 @@ import PropTypes from 'prop-types'
           </tbody>
 
          </table>
+         <div className="entries">
+            <span>Showing {pageIndex * pageSize + 1} to {pageIndex * 
+            pageSize + page.length} of {data.length} entries</span>
+         </div>
          <div className="pagination">
            <button onClick={() => previousPage()} disabled={!canPreviousPage}>
              Previous
@@ -59,7 +77,7 @@ import PropTypes from 'prop-types'
            <span>
              Page{' '}
              <strong>
-               {pageIndex + 1} of {page.length}
+               {pageIndex + 1} of {Math.ceil(data.length / pageSize)}
              </strong>{' '}
            </span>
            <button onClick={() => nextPage()} disabled={!canNextPage}>

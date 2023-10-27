@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
-//import { Link } from 'react-router-dom'
 import TableTemplate from './TableTemplate'
+import { Link } from 'react-router-dom';
+
+import '../styles/Employees.css'
 
 const columns = [
   { Header: 'First Name',    accessor: 'firstName'   },
@@ -23,7 +25,15 @@ const Employees = () => {
     }
   }, [])
 
-  return <TableTemplate columns={columns} data={data} />
+  return (
+    <div className="App">
+      <h1 className='title'>Current Employees</h1>
+      <section className="container">
+        <TableTemplate columns={columns} data={data} />
+        <Link to="/">Home</Link>
+      </section>
+    </div>
+  )
 }
 
 export default Employees
