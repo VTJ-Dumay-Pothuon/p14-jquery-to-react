@@ -1,8 +1,12 @@
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useTable, useSortBy, usePagination } from 'react-table'
 import PropTypes from 'prop-types'
 
 const TableTemplate = ({columns, data}) => {
+
+    const [searchText, setSearchText] = useState('')
+    const [filteredData, setFilteredData] = useState(data)
+  
     const {
         getTableProps,
         getTableBodyProps,
@@ -18,7 +22,7 @@ const TableTemplate = ({columns, data}) => {
         setPageSize
     } = useTable({
         columns,
-        data,
+        data: filteredData,
         initialState: { pageIndex: 0, pageSize: 10, 
           sortBy: [{ id: 'firstName', desc: false }]
         }
@@ -63,7 +67,11 @@ const TableTemplate = ({columns, data}) => {
         const currentPage = document.querySelector('.page--current')
         buttons.forEach((button, index) => {
             button.style.display = ''
-            if (index !== 0 && index !== 1 && button !== currentPage.previousElementSibling && button !== currentPage && button !== currentPage.nextElementSibling && index !== buttons.length - 2 && index !== buttons.length - 1) {
+            if (index !== 0 && index !== 1 && 
+                button !== currentPage.previousElementSibling && 
+                    button !== currentPage && 
+                button !== currentPage.nextElementSibling && 
+              index !== buttons.length - 2 && index !== buttons.length - 1) {
                 button.textContent = '…'
                 button.disabled = true
                 if (buttons[index - 1].textContent === '…') {
@@ -82,12 +90,21 @@ const TableTemplate = ({columns, data}) => {
 
     useEffect(() => {
         hideButtons()
-    }, [pageSize, pageIndex])
+    }, [pageSize, pageIndex, filteredData])
 
     window.addEventListener('load', () => {
         hideButtons()
         window.removeEventListener('load', () => {})
     })
+
+    useEffect(() => {
+      const newFilteredData = data.filter((row) => {
+        return Object.values(row).some((cell) =>
+          String(cell).toLowerCase().includes(searchText.toLowerCase())
+        )
+      })
+      setFilteredData(newFilteredData)
+    }, [searchText, data])
 
     return (
         <div>
@@ -105,7 +122,10 @@ const TableTemplate = ({columns, data}) => {
                 </div>
                 <div className="search">
                   <span>Search: </span>
-                  <input type="text"/>
+                    <input type="text"
+                    value={searchText}
+                    onChange={(e) => setSearchText(e.target.value)}
+                  />
                 </div>
             </div>
             <table {...getTableProps()} className="table">
@@ -151,17 +171,16 @@ const TableTemplate = ({columns, data}) => {
             </table>
             <div className="tableFooter">
                 <div className="entries">
-                    <span>Showing {pageIndex * pageSize + 1}
-                        to {pageIndex * pageSize + page.length}
-                        of {data.length}
-                        entries</span>
+                    <span>Showing {pageIndex * 
+                    pageSize + 1} to {pageIndex * pageSize + 
+                    page.length} of {filteredData.length} entries</span>
                 </div>
                 <div className="pagination">
                     <button onClick={() => previousPage()} disabled={!canPreviousPage}>
                         Previous
                     </button>
                     {Array.from({
-                        length: Math.ceil(data.length / pageSize)
+                        length: Math.ceil(filteredData.length / pageSize)
                     }, (_, i) => i + 1).map(buttonIndex => (
                         <button
                             key={buttonIndex}
