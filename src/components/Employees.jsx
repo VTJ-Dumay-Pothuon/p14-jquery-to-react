@@ -27,7 +27,7 @@ const Employees = () => {
   { Header: 'Date of Birth',accessor: 'dateOfBirth',sortType: datetime     },
   { Header: 'Street',       accessor: 'street',     sortType: alphabetical },
   { Header: 'City',         accessor: 'city',       sortType: alphabetical },
-  { Header: 'State',        accessor: 'state',      sortType: alphabetical },
+  { Header: 'State',        accessor: 'stateShort', sortType: alphabetical },
   { Header: 'Zip Code',     accessor: 'zipCode',    sortType: alphabetical }
     ]
 

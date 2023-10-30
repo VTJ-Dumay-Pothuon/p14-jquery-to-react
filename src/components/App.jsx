@@ -19,7 +19,7 @@ const App = () => {
     const [department, setDepartment] = useState('Sales')
     const [street, setStreet] = useState('')
     const [city, setCity] = useState('')
-    const [selectedState, setSelectedState] = useState('AL')
+    const [stateShort, setStateShort] = useState('AL')
     const [zipCode, setZipCode] = useState('')
     const [confirmationVisible, setConfirmationVisible] = useState(false)
     const [isOpen, setIsOpen] = useState({state: false, department: false})
@@ -48,7 +48,7 @@ const App = () => {
             department,
             street,
             city,
-            state: selectedState,
+            state: stateShort,
             zipCode
         }
         dispatch(addEmployee(employee))
@@ -146,8 +146,8 @@ const App = () => {
                             className={`home ${isOpen.state ? 'opened' : 'closed'}`}
                             onClick={() => toggleSelect('state')}
                             name="state" id="state"
-                            value={selectedState}
-                            onChange={(e) => setSelectedState(e.target.value)}>
+                            value={stateShort}
+                            onChange={(e) => setStateShort(e.target.value)}>
                             <option value="">Select State</option>
                             {states.map((state) => (
                                 <option key={state.abbreviation}

@@ -1,3 +1,5 @@
+/* global $ */
+
 $(function() {
     const employees = JSON.parse(localStorage.getItem('employees'));
 
@@ -11,7 +13,7 @@ $(function() {
             { title: 'Date of Birth', data: 'dateOfBirth' },
             { title: 'Street', data: 'street' },
             { title: 'City', data: 'city' },
-            { title: 'State', data: 'state' },
+            { title: 'State', data: 'stateShort' },
             { title: 'Zip Code', data: 'zipCode' },
         ]
     });
