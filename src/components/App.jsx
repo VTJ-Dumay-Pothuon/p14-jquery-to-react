@@ -6,8 +6,9 @@ import { Link, useNavigate } from 'react-router-dom'
 import { addEmployee, getEmployees } from '../actions/employee_actions'
 import states from '../assets/states'
 
+import '../plugins/DatePicker.js'
+
 import '../styles/App.scss'
-/* global $ */
 
 Modal.setAppElement('#root')
 
@@ -67,8 +68,6 @@ const App = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        $('#date-of-birth').datetimepicker({timepicker: false, format: 'm/d/Y'})
-        $('#start-date').datetimepicker({timepicker: false, format: 'm/d/Y'})
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
@@ -111,19 +110,21 @@ const App = () => {
                         onChange={(e) => setLastName(e.target.value)}/>
 
                     <label htmlFor="date-of-birth">Date of Birth</label>
+                    <date-picker>
                     <input
                         id="date-of-birth"
                         type="text"
                         value={dateOfBirth}
                         onChange={(e) => setDateOfBirth(e.target.value)}/>
-
+                    </date-picker>
                     <label htmlFor="start-date">Start Date</label>
+                    <date-picker>
                     <input
                         id="start-date"
                         type="text"
                         value={startDate}
                         onChange={(e) => setStartDate(e.target.value)}/>
-
+                    </date-picker>
                     <fieldset className="address">
                         <legend>Address</legend>
 
