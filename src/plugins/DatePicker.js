@@ -1,3 +1,6 @@
+// I MADE THIS VANILLA PLUGIN BY MISTAKE, IT'S NOT PART OF THE PROJECT
+// I'M LEAVING IT HERE BECAUSE IT'S A NICE PIECE OF CODE, BUT IT'S NOT USED
+
 // Possible attributes :
 // - top : vertical offset from the input field (default: 4px)
 // - left : horizontal offset from the input field (default: 0px)
