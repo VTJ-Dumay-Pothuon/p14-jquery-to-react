@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Modal from 'react-modal'
 import { Link, useNavigate } from 'react-router-dom'
+import DatePicker from './DatePicker'
 
 import { addEmployee, getEmployees } from '../actions/employee_actions'
 import states from '../assets/states'
 
-import '../plugins/DatePicker.js'
+// import '../plugins/DatePicker.js'
 
 import '../styles/App.scss'
 
@@ -110,21 +111,17 @@ const App = () => {
                         onChange={(e) => setLastName(e.target.value)}/>
 
                     <label htmlFor="date-of-birth">Date of Birth</label>
-                    <date-picker>
-                    <input
-                        id="date-of-birth"
-                        type="text"
-                        value={dateOfBirth}
-                        onChange={(e) => setDateOfBirth(e.target.value)}/>
-                    </date-picker>
+                    <DatePicker
+                      id="date-of-birth"
+                      value={dateOfBirth}
+                      onChange={(e) => setDateOfBirth(e.target.value)}
+                    />
                     <label htmlFor="start-date">Start Date</label>
-                    <date-picker>
-                    <input
-                        id="start-date"
-                        type="text"
-                        value={startDate}
-                        onChange={(e) => setStartDate(e.target.value)}/>
-                    </date-picker>
+                    <DatePicker
+                      id="start-date"
+                      value={startDate}
+                      onChange={(e) => setStartDate(e.target.value)}
+                    />
                     <fieldset className="address">
                         <legend>Address</legend>
 
