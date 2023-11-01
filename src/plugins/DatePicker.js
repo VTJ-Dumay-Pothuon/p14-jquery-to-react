@@ -4,15 +4,14 @@
 // - lang : ISO language for the month display (default: browser language)
 // - format : date format, any of DMY|MDY|YMD (default: DMY = DD/MM/YYYY)
 
-// Always useful, for a calendar
-const today = new Date()
-let chosenYear
-let inputFieldHadFocus = false
-
 class DatePicker extends HTMLElement {
 
   constructor() {
     super()
+    // Always useful, for a calendar
+    const today = new Date()
+    let chosenYear
+    let inputFieldHadFocus = false
     let currentMonth = today.getMonth()
     // Create a shadow DOM for encapsulation :
     // This means the input field and the popup will be encapsulated
@@ -47,7 +46,10 @@ class DatePicker extends HTMLElement {
 
     // THIS is actually the main function. But as it needs to be re-called
     // when the year changes, it's been put in a separate function.
-    const { leapDay, februaryPageLastChild } = this.populate(popup, currentMonth)
+    const { leapDay, februaryPageLastChild, getChosenYear, inputFieldState } = 
+    this.populate(popup, currentMonth, chosenYear, inputFieldHadFocus)
+    chosenYear = getChosenYear
+    inputFieldHadFocus = inputFieldState
     // See populate()'s return for an explanation about leapDay and februaryPageLastChild.
 
     // Check if the year displayed in the input field is a leap year
@@ -72,7 +74,7 @@ class DatePicker extends HTMLElement {
       if (typeof window.gc === 'function') window.gc()
 
       // Re-populate the popup with the new year
-      this.populate(popup, chosenMonth)
+      this.populate(popup, chosenMonth, chosenYear, inputFieldHadFocus)
       
       if (this.isLeapYear(chosenYear)) {
         leapDay.style.display = ''
@@ -169,7 +171,7 @@ class DatePicker extends HTMLElement {
 
   isLeapYear(year) { return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0) }
 
-  populate(popup, currentMonth) {
+  populate(popup, currentMonth, chosenYear, inputFieldHadFocus) {
     // Required by the month selector
     let currentMonthPage
     // Required by the month array builder
@@ -192,7 +194,7 @@ class DatePicker extends HTMLElement {
           currentMonthPage.style.display = 'none'
           currentMonthPage = currentMonthPage.previousElementSibling
           currentMonthPage.style.display = 'grid'
-          currentMonthDisplay.textContent = previousMonth.toLocaleDateString (
+          currentMonthDisplay.textContent  = previousMonth.toLocaleDateString (
           this.getAttribute('lang') || undefined,{ month: 'long' })
           // Disable the previous month button if the current month is January
           if (currentMonth+1 === 1) toPreviousMonth.disabled = true
@@ -210,7 +212,7 @@ class DatePicker extends HTMLElement {
         currentMonthDisplay.style.width = '6rem'
         currentMonthDisplay.style.textAlign = 'center'
         currentMonthDisplay.style.textTransform = 'capitalize'
-        currentMonthDisplay.textContent = new Date(chosenYear, currentMonth).toLocaleDateString (
+          currentMonthDisplay.textContent  = new Date(chosenYear, currentMonth).toLocaleDateString (
         this.getAttribute('lang') || undefined,{ month: 'long' })
       monthSelector.appendChild(currentMonthDisplay)
 
@@ -224,7 +226,7 @@ class DatePicker extends HTMLElement {
           currentMonthPage.style.display = 'none'
           currentMonthPage = currentMonthPage.nextElementSibling
           currentMonthPage.style.display = 'grid'
-          currentMonthDisplay.textContent = nextMonth.toLocaleDateString (
+          currentMonthDisplay.textContent  = nextMonth.toLocaleDateString (
           this.getAttribute('lang') || undefined,{ month: 'long' })
           // Disable the next month button if the current month is December
           if (currentMonth+1 === 12) toNextMonth.disabled = true
@@ -383,7 +385,7 @@ class DatePicker extends HTMLElement {
     // When the year is a leap year, leapDay is displayed and februaryPageLastChild is hidden.
     // When the year is not a leap year, leapDay is hidden and februaryPageLastChild is displayed.
     // This way, February alwars has 42 buttons displayed, like the other months.
-    return { leapDay, februaryPageLastChild }
+    return { leapDay, februaryPageLastChild, chosenYear, inputFieldHadFocus }
   }
 }
 
