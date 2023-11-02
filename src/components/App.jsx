@@ -2,12 +2,15 @@ import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Modal from 'react-modal'
 import { Link, useNavigate } from 'react-router-dom'
-import DatePicker from './DatePicker'
+
+/* LOCAL REACT COMPONENT */
+//import { DatePicker } from  './DatePicker'
+
+/* MATCHING NPM PACKAGE */
+import { DatePicker } from '@vtjdp/date-picker'
 
 import { addEmployee, getEmployees } from '../actions/employee_actions'
 import states from '../assets/states'
-
-// import '../plugins/DatePicker.js'
 
 import '../styles/App.scss'
 
