@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 import PropTypes from 'prop-types'
 
@@ -15,6 +15,12 @@ const DatePicker = ({ lang = 'default', format = 'DMY', start = 'monday' }) => {
   // The current month chosen with the month selector arrows (default: current month)
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth())
 
+  // Horizontally align the popup with the input field
+  const [popupHorizontalAlign, setPopupHorizontalAlign] = useState(0)
+  // Vertical align is automatic, but the popup is displayed
+  // above the input field if there is not enough space below
+  const [popupVerticalAlign, setPopupVerticalAlign] = useState(0)
+  
   const popupRef = useRef(null)
   const yearSelectorRef = useRef(null)
   const inputFieldRef = useRef(null)
@@ -25,9 +31,9 @@ const DatePicker = ({ lang = 'default', format = 'DMY', start = 'monday' }) => {
   const dayShift = days.indexOf(start.toLowerCase()) || 0
 
   // If the user clicks outside the popup after clicking in it, close it
-  document.addEventListener('mousedown', (event) => {
+  document.addEventListener('mousedown', (e) => {
     if (!popupDisplay) return
-    if (popupRef.current && !popupRef.current.contains(event.target)) {
+    if (popupRef.current && !popupRef.current.contains(e.target)) {
       setPopupDisplay(false)
     }
   })
@@ -36,12 +42,25 @@ const DatePicker = ({ lang = 'default', format = 'DMY', start = 'monday' }) => {
   const isLeapYear = (year) =>
     (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0
 
-  const handleInputFocus = () => setPopupDisplay(true)
+  useEffect(() => {
+    if (popupRef.current) {
+      const popupRect = popupRef.current.getBoundingClientRect();
+      if (popupRect.bottom > window.innerHeight) {
+        setPopupVerticalAlign(0 - popupRect.height - inputFieldRef.current.offsetHeight - 4)
+      } else {
+        setPopupVerticalAlign(4)
+      }
+    }
+  }, [popupDisplay])
 
+  const handleInputFocus = () => {
+    const inputRect = inputFieldRef.current.getBoundingClientRect()
+    setPopupHorizontalAlign(inputRect.left)
+    setPopupDisplay(true)
+  }
 
-
-  const handleYearChange = () => {
-    const newYear = parseInt(event.target.value)
+  const handleYearChange = (e) => {
+    const newYear = parseInt(e.target.value)
     setChosenYear(newYear)
     daysOfTheMonth()
   }
@@ -57,8 +76,8 @@ const DatePicker = ({ lang = 'default', format = 'DMY', start = 'monday' }) => {
 
   const handleYearWheel = () =>  yearSelectorRef.current.focus()
 
-  const toPreviousMonth = (event) => {
-    event.preventDefault()
+  const toPreviousMonth = (e) => {
+    e.preventDefault()
     setTimeout(() => {
         if (currentMonth === 0) {
             setCurrentMonth(11)
@@ -69,8 +88,8 @@ const DatePicker = ({ lang = 'default', format = 'DMY', start = 'monday' }) => {
     }, 10)
   }
 
-  const toNextMonth = (event) => {
-    event.preventDefault()
+  const toNextMonth = (e) => {
+    e.preventDefault()
     setTimeout(() => {
         if (currentMonth === 11) {
             setCurrentMonth(0)
@@ -176,8 +195,8 @@ const DatePicker = ({ lang = 'default', format = 'DMY', start = 'monday' }) => {
           className="day-button currentMonth"
           style={{ width: '30px', border: 'none', background: 'none' }}
           onMouseDown={() => clickOnDay(day)}
-          onMouseOver={() => event.target.style.background = '#EEE'}
-          onMouseOut= {() => event.target.style.background = 'none'}
+          onMouseOver={(e) => e.target.style.background = '#EEE'}
+          onMouseOut= {(e) => e.target.style.background = 'none'}
         >{day}</button>
       )
     }
@@ -217,7 +236,8 @@ const DatePicker = ({ lang = 'default', format = 'DMY', start = 'monday' }) => {
         style={{ 
             height: '190px',
             padding: '10px', paddingRight: '0',
-            marginTop: '4px',
+            marginLeft: `${popupHorizontalAlign}px`,
+            marginTop:  `${popupVerticalAlign}px`,
             backgroundColor: '#FFF',
             border: '1px solid #CCC', borderBottomColor: '#BBB',
             boxShadow: '0 5px 15px -5px rgba(0, 0, 0, 0.5)',
@@ -267,4 +287,4 @@ const DatePicker = ({ lang = 'default', format = 'DMY', start = 'monday' }) => {
   )
 }
 
-export default DatePicker
+export {DatePicker}
