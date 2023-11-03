@@ -48,7 +48,7 @@ const App = () => {
             department,
             street,
             city,
-            state: stateShort,
+            stateShort,
             zipCode
         }
         dispatch(addEmployee(employee))
