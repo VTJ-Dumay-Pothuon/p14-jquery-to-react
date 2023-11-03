@@ -112,13 +112,13 @@ const App = () => {
                     <DatePicker
                       id="date-of-birth"
                       value={dateOfBirth}
-                      onChange={(e) => setDateOfBirth(e.target.value)}
+                      onChange={(date) => setDateOfBirth(date)}
                     />
                     <label htmlFor="start-date">Start Date</label>
                     <DatePicker
                       id="start-date"
                       value={startDate}
-                      onChange={(e) => setStartDate(e.target.value)}
+                      onChange={(date) => setStartDate(date)}
                     />
                     <fieldset className="address">
                         <legend>Address</legend>
