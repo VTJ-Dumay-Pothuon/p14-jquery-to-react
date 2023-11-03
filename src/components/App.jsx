@@ -12,7 +12,7 @@ import { DatePicker } from '@vtjdp/date-picker'
 import { addEmployee, getEmployees } from '../actions/employee_actions'
 import states from '../assets/states'
 
-import '../styles/App.scss'
+import '../styles/App-min.scss'
 
 Modal.setAppElement('#root')
 

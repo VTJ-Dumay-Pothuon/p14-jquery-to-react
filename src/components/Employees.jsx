@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 import { getEmployees } from '../actions/employee_actions'
 
-import '../styles/Employees.scss'
+import '../styles/Employees-min.scss'
 
 const Employees = () => {
     const dispatch = useDispatch()
