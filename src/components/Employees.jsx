@@ -1,11 +1,19 @@
 import { useState, useEffect, useMemo } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import TableTemplate from './TableTemplate'
 import { Link } from 'react-router-dom'
+
+import { getEmployees } from '../actions/employee_actions'
 
 import '../styles/Employees.scss'
 
 const Employees = () => {
-    const [data, setData] = useState([])
+    const dispatch = useDispatch()
+
+    const employees = useSelector((state) => state.store.employeeReducer.employees);
+    const [data, setData] = useState(employees)
+    useEffect(() => dispatch(getEmployees()), [dispatch])
+    useEffect(() => setData(employees), [employees])
 
     const alphabetical = useMemo(() => (rowA, rowB, columnId) => {
         const a = rowA.original[columnId].toLowerCase()
@@ -30,13 +38,6 @@ const Employees = () => {
   { Header: 'State',        accessor: 'stateShort', sortType: alphabetical },
   { Header: 'Zip Code',     accessor: 'zipCode',    sortType: alphabetical }
     ]
-
-    useEffect(() => {
-        const employees = JSON.parse(localStorage.getItem('employees'))
-        if (employees) {
-            setData(employees)
-        }
-    }, [])
 
     return (
         <div className="App">

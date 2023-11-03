@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import Modal from 'react-modal'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -29,11 +29,8 @@ const App = () => {
     const [confirmationVisible, setConfirmationVisible] = useState(false)
     const [isOpen, setIsOpen] = useState({state: false, department: false})
 
-    getEmployees()
-    const employees = useSelector((state) => state.store.employeeReducer.employees)
-    useEffect(() => {
-        localStorage.setItem('employees', JSON.stringify(employees))
-    }, [employees])
+    const dispatch = useDispatch()
+    useEffect(() => dispatch(getEmployees()), [dispatch])
 
     const toggleSelect = (selectName) => {
         setIsOpen((prevState) => ({
@@ -41,8 +38,6 @@ const App = () => {
             [selectName]: !prevState[selectName]
         }))
     }
-
-    const dispatch = useDispatch()
 
     const saveEmployee = () => {
         const employee = {

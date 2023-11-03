@@ -14,8 +14,8 @@ const employeeReducer = (state = initialState, action) => {
         employees: action.payload
       };
     default:
-      return state;
+      return state
   }
-};
+}
 
-export default employeeReducer;
+export default employeeReducer
