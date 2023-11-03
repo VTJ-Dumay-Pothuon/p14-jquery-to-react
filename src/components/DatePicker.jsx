@@ -113,8 +113,9 @@ const DatePicker = (
   const daysOfTheWeek = () => {
     const daysOfTheWeekArray = []
   
-    for (let day = 0 ; day < 7 ; day++) {
-      const weekDayName = new Date(0, 0, day + 1).toLocaleDateString(lang || undefined, { weekday: 'short' })
+    for (let day = dayShift ; day < 7 + dayShift ; day++) {
+      const weekDayName = new Date(0, 0, (day)%7)
+      .toLocaleDateString(lang || undefined, { weekday: 'short' })
       const trimmedName = weekDayName.slice(0, -1)
   
       daysOfTheWeekArray.push(
@@ -122,7 +123,7 @@ const DatePicker = (
           display: 'inline-block',
           width: '35px',
           textTransform: 'capitalize',
-          textAlign: 'center',
+          textAlign: 'center'
         }}>
           {trimmedName}
         </span>
@@ -178,7 +179,7 @@ const DatePicker = (
     }
 
     // Calculate the index of the first day of the currentMonth
-    const firstDayIndex = new Date(chosenYear, currentMonth, dayShift-1).getDay()
+    const firstDayIndex = new Date(chosenYear, currentMonth, 7-dayShift+1).getDay()
 
     // Create an array to hold the days of the month
     const monthPage = []
