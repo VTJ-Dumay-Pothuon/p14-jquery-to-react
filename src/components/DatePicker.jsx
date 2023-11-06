@@ -54,7 +54,7 @@ const DatePicker = (
 
   useEffect(() => {
     if (popupRef.current) {
-      const popupRect = popupRef.current.getBoundingClientRect();
+      const popupRect = popupRef.current.getBoundingClientRect()
       if (popupRect.bottom > window.innerHeight) {
         setPopupVerticalAlign(0 - popupRect.height - inputFieldRef.current.offsetHeight - 4)
       } else {

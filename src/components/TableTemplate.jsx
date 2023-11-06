@@ -38,9 +38,9 @@ const TableTemplate = ({columns, data}) => {
 
                 const index = columns.findIndex((column) => column.accessor === sortBy[0].id) + 1
 
-                const headerElements = Array.from(document.querySelectorAll('thead tr th:nth-child(' + index + ')'));
-                const cellElements = Array.from(document.querySelectorAll('tbody tr td:nth-child(' + index + ')'));
-                const headerAndCells = headerElements.concat(cellElements);
+                const headerElements = Array.from(document.querySelectorAll('thead tr th:nth-child(' + index + ')'))
+                const cellElements = Array.from(document.querySelectorAll('tbody tr td:nth-child(' + index + ')'))
+                const headerAndCells = headerElements.concat(cellElements)
                 headerAndCells.forEach((element) => {
                     element.classList.add('sorted')
                 })

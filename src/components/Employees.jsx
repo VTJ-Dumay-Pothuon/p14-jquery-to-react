@@ -10,7 +10,7 @@ import '../styles/Employees-min.scss'
 const Employees = () => {
     const dispatch = useDispatch()
 
-    const employees = useSelector((state) => state.store.employeeReducer.employees);
+    const employees = useSelector((state) => state.store.employeeReducer.employees)
     const [data, setData] = useState(employees)
     useEffect(() => dispatch(getEmployees()), [dispatch])
     useEffect(() => setData(employees), [employees])
