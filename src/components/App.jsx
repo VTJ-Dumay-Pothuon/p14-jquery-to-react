@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import Modal from 'react-modal'
+import Select from 'react-select'
 import { Link, useNavigate } from 'react-router-dom'
 
 /* LOCAL REACT COMPONENT */
@@ -27,17 +28,9 @@ const App = () => {
     const [stateShort, setStateShort] = useState('AL')
     const [zipCode, setZipCode] = useState('')
     const [confirmationVisible, setConfirmationVisible] = useState(false)
-    const [isOpen, setIsOpen] = useState({state: false, department: false})
 
     const dispatch = useDispatch()
     useEffect(() => dispatch(getEmployees()), [dispatch])
-
-    const toggleSelect = (selectName) => {
-        setIsOpen((prevState) => ({
-            ...prevState,
-            [selectName]: !prevState[selectName]
-        }))
-    }
 
     const saveEmployee = () => {
         const employee = {
@@ -56,14 +49,6 @@ const App = () => {
         document.body.classList.add('no-scroll')
     }
 
-    const handleClickOutside = (e) => {
-        if (document.getElementById('state').contains(e.target) || 
-        document.getElementById('department').contains(e.target)) {
-            return
-        }
-        setIsOpen({state: false, department: false})
-    }
-
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -79,11 +64,30 @@ const App = () => {
             }
         })
 
-        document.addEventListener('mousedown', handleClickOutside)
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside)
-        }
     }, [navigate])
+
+    const selectStyle = {
+        control: (base) => ({  ...base, backgroundColor: '#f6f6f6' }),
+        valueContainer: () => ({
+            height: '21px',
+            paddingLeft: '15px',
+            cursor: 'pointer'
+        }),
+        option: (base, { isFocused, isSelected }) => ({
+            ...base,
+            color: isFocused || isSelected ? '#fff' : '#454545',
+        }),
+        placeholder: () => ({ color: '#454545' }),
+        singleValue: () => ({ color: '#454545' }),
+        indicatorSeparator: () => ({ display: 'none'}),
+        dropdownIndicator: (base, state) => ({
+            ...base,
+            color: '#777',
+            paddingRight: '15px',
+            transition: 'all .2s ease',
+            transform: state.selectProps.menuIsOpen ? 'rotate(180deg)' : null
+          })
+    }
 
     return (
         <div className="App">
@@ -138,20 +142,22 @@ const App = () => {
                             onChange={(e) => setCity(e.target.value)}/>
 
                         <label htmlFor="state">State</label>
-                        <select
-                            className={`home ${isOpen.state ? 'opened' : 'closed'}`}
-                            onClick={() => toggleSelect('state')}
-                            name="state" id="state"
-                            value={stateShort}
-                            onChange={(e) => setStateShort(e.target.value)}>
-                            <option value="">Select State</option>
-                            {states.map((state) => (
-                                <option key={state.abbreviation}
-                                    value={state.abbreviation}>
-                                    {state.name}
-                                </option>
-                            ))}
-                        </select>
+                        <Select
+                        styles={selectStyle}
+                        theme={(theme) => ({
+                            ...theme,
+                            colors: {...theme.colors,primary25:'#08F',primary:'#08F'}
+                        })}
+                        name="state" id="state"
+                        className={'home'}
+                        isSearchable={false}
+                        menuPlacement="auto"
+                        options={states.map((state) => ({
+                            value: state.abbreviation,
+                            label: state.name
+                        }))}
+                        onChange={(state) => setStateShort(state.value)}
+                        placeholder="Select State" />
 
                         <label htmlFor="zip-code">Zip Code</label>
                         <input
@@ -162,23 +168,21 @@ const App = () => {
                     </fieldset>
 
                     <label htmlFor="department">Department</label>
-                    <select
-                        className={`home ${isOpen.department
-                        ? 'opened'
-                        : 'closed'}`}
-                        onClick={() => toggleSelect('department')}
-                        name="department"
-                        id="department"
-                        value={department}
-                        onChange={(e) => {
-                        setDepartment(e.target.value)
-                    }}>
-                        <option>Sales</option>
-                        <option>Marketing</option>
-                        <option>Engineering</option>
-                        <option>Human Resources</option>
-                        <option>Legal</option>
-                    </select>
+                    <Select
+                        styles={selectStyle}
+                        name="department" id="department"
+                        className={'home'}
+                        isSearchable={false}
+                        menuPlacement="auto"
+                        options={[
+                            { value: 'Sales', label: 'Sales' },
+                            { value: 'Marketing', label: 'Marketing' },
+                            { value: 'Engineering', label: 'Engineering' },
+                            { value: 'Human Resources', label: 'Human Resources' },
+                            { value: 'Legal', label: 'Legal' }
+                        ]}
+                        onChange={(state) => setDepartment(state.value)}
+                        placeholder="Select Department" />
                 </form>
 
                 <button onClick={saveEmployee}>Save</button>
