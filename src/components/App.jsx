@@ -170,6 +170,10 @@ const App = () => {
                     <label htmlFor="department">Department</label>
                     <Select
                         styles={selectStyle}
+                        theme={(theme) => ({
+                            ...theme,
+                            colors: {...theme.colors,primary25:'#08F',primary:'#08F'}
+                        })}
                         name="department" id="department"
                         className={'home'}
                         isSearchable={false}
